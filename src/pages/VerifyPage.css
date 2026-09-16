@@ -1,0 +1,30 @@
+.verify-page {
+  min-height: calc(100vh - var(--header-height));
+}
+
+.verify-progress-wrap {
+  padding-top: var(--space-8);
+}
+
+.verify-error {
+  padding-top: var(--space-16);
+}
+
+.verify-error-card {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.verify-error-card h2 {
+  font-size: var(--text-xl);
+}
+
+.verify-error-card p {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}

@@ -1,0 +1,93 @@
+.prov-card { margin-bottom: var(--space-4); }
+
+.prov-header { margin-bottom: var(--space-4); }
+
+.prov-title-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.prov-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.prov-verified .prov-status-badge {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid var(--color-success-border);
+}
+.prov-unavailable .prov-status-badge {
+  background: var(--color-neutral-bg);
+  color: var(--color-neutral);
+  border: 1px solid var(--color-neutral-border);
+}
+.prov-unverifiable .prov-status-badge {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning-border);
+}
+
+/* Fields */
+.prov-fields {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.prov-field {
+  display: contents;
+}
+
+.prov-field dt {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--weight-medium);
+  align-self: baseline;
+}
+
+.prov-field dd {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  align-self: baseline;
+}
+
+.prov-ai-disclosure {
+  color: var(--color-warning) !important;
+  font-weight: var(--weight-medium);
+}
+
+/* Toggle */
+.prov-toggle {
+  margin-top: var(--space-2);
+}
+
+/* Detail box */
+.prov-detail-box {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.prov-detail-note {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: var(--leading-normal);
+}
+
+/* Not found */
+.prov-not-found-note {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: var(--leading-normal);
+}

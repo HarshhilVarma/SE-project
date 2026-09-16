@@ -1,0 +1,72 @@
+.evidence-summary { margin-bottom: var(--space-4); }
+
+.ev-list {
+  margin-top: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.ev-row {
+  border-bottom: 1px solid var(--color-border);
+}
+.ev-row:last-child { border-bottom: none; }
+
+.ev-row-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--duration-fast);
+}
+.ev-row-btn:hover { background: var(--color-surface-2); }
+
+/* Icon */
+.ev-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  flex-shrink: 0;
+}
+.ev-success { background: var(--color-success-bg); color: var(--color-success); border: 1px solid var(--color-success-border); }
+.ev-neutral { background: var(--color-neutral-bg); color: var(--color-neutral); border: 1px solid var(--color-neutral-border); }
+.ev-warning { background: var(--color-warning-bg); color: var(--color-warning); border: 1px solid var(--color-warning-border); }
+.ev-error   { background: var(--color-error-bg);   color: var(--color-error);   border: 1px solid var(--color-error-border); }
+
+.ev-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  flex: 1;
+}
+
+.ev-value {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-right: var(--space-2);
+}
+
+.ev-chevron {
+  font-size: 9px;
+  color: var(--color-text-subtle);
+}
+
+/* Detail panel */
+.ev-detail {
+  padding: var(--space-3) var(--space-4) var(--space-4) calc(22px + var(--space-3) + var(--space-4));
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  line-height: var(--leading-normal);
+  border-top: 1px solid var(--color-border);
+}
