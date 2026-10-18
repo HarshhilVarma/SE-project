@@ -229,3 +229,11 @@ async def verify_image(file: UploadFile = File(...)) -> Dict[str, Any]:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal verification error: {str(e)}")
 
+
+# Mount pre-built React frontend if dist/ directory exists
+dist_dir = Path(__file__).resolve().parents[2] / "dist"
+if dist_dir.is_dir():
+    from fastapi.staticfiles import StaticFiles
+    app.mount("/", StaticFiles(directory=str(dist_dir), html=True), name="static")
+
+

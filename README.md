@@ -96,6 +96,29 @@ aidetector validate-manifest --manifest data/manifests/dataset.csv
 aidetector train-classical --manifest data/manifests/dataset.csv --config configs/train.yaml
 ```
 
+## Running the Web Application
+
+To launch both the FastAPI verification backend and the React frontend with a single command, execute:
+
+```bash
+./run_app.sh
+```
+
+### Options:
+- `./run_app.sh --backend-only`: Run only the FastAPI backend server on port 8000.
+- `./run_app.sh --frontend-only`: Run only the Vite React dev server on port 5173.
+- `./run_app.sh --host 0.0.0.0 --backend-port 8000`: Specify custom host binding and port.
+
+### Services:
+- **Web App UI:** `http://localhost:5173`
+- **FastAPI Backend:** `http://127.0.0.1:8000`
+- **Swagger Interactive API Docs:** `http://127.0.0.1:8000/docs`
+
+You can also start the FastAPI server directly via CLI:
+```bash
+aidetector serve --host 127.0.0.1 --port 8000
+```
+
 ## Known Limitations
 
 - **Not Proof of Authenticity:** Model scores indicate statistical similarity to training artifacts, not legal or definitive proof of provenance.

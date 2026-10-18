@@ -71,3 +71,4 @@ export async function runVerification(file, onStep) {
     return await runMockVerification(file, onStep);
   }
 }
+
