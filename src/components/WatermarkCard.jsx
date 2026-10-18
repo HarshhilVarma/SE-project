@@ -28,8 +28,9 @@ export default function WatermarkCard({ watermark }) {
             <span className="wm-status-text">No recognized signal found</span>
           </div>
           <p className="wm-detail">
-            No supported watermark signal was detected. This does not indicate that the image is
-            authentic or AI-generated.
+            No supported digital watermark was detected. Checked standards include: <strong>Google SynthID</strong>,
+            <strong> C2PA Content Credentials</strong>, <strong>OpenAI DALL-E</strong>, and <strong>Invisible-Watermark (SD)</strong>.
+            Absence does not indicate authenticity or synthetic origin.
           </p>
         </div>
       )}

@@ -78,7 +78,43 @@ export default function DetectionResult({ aiResult, hasUsableEvidence, provenanc
           </div>
         )}
         <p className="dr-summary">{aiResult.summary}</p>
-        <span className="dr-basis">Based on visual AI analysis</span>
+
+        {aiResult.branchScores && (
+          <div className="dr-branch-scores" aria-label="Detector branch scores">
+            {aiResult.branchScores.classical_probability != null && (
+              <span className="dr-branch-pill" title="187 classical forensic features (ELA, FFT, Jia color, residuals)">
+                <span className="dr-branch-name">Classical Forensics:</span>
+                <span className="dr-branch-val">{(aiResult.branchScores.classical_probability * 100).toFixed(1)}% AI</span>
+              </span>
+            )}
+            {aiResult.branchScores.cnn_probability != null && (
+              <span className="dr-branch-pill" title="Fine-tuned ResNet-18 neural classifier">
+                <span className="dr-branch-name">Neural ResNet-18:</span>
+                <span className="dr-branch-val">{(aiResult.branchScores.cnn_probability * 100).toFixed(1)}% AI</span>
+              </span>
+            )}
+            {aiResult.branchScores.fusion_probability != null && (
+              <span className="dr-branch-pill" title="Late Fusion calibrated score combining both branches">
+                <span className="dr-branch-name">Calibrated Fusion:</span>
+                <span className="dr-branch-val">{(aiResult.branchScores.fusion_probability * 100).toFixed(1)}% AI</span>
+              </span>
+            )}
+          </div>
+        )}
+
+        {aiResult.qualityFlags && aiResult.qualityFlags.length > 0 && (
+          <div className="dr-quality-flags" role="note">
+            {aiResult.qualityFlags.map((flag, idx) => (
+              <span key={idx} className="dr-quality-flag">
+                ⚠ Quality note: {flag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <span className="dr-basis">
+          Based on dual-branch visual forensics & neural verification {aiResult.modelVersion ? `(${aiResult.modelVersion})` : ''}
+        </span>
       </div>
     </div>
   );

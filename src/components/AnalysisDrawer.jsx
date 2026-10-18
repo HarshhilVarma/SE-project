@@ -92,15 +92,38 @@ export default function AnalysisDrawer({ open, onClose, provenance, metadata, wa
                   <dd>{aiResult.classification.replace('_', ' ')}</dd>
                   <dt>Confidence</dt>
                   <dd>{aiResult.confidence}%</dd>
-                  <dt>Heatmap</dt>
-                  <dd>{aiResult.heatmapAvailable ? 'Available' : 'Not available'}</dd>
+                  <dt>Model Version</dt>
+                  <dd>{aiResult.modelVersion || 'aid-fusion-v1'}</dd>
+                  {aiResult.branchScores?.classical_probability != null && (
+                    <>
+                      <dt>Classical Forensics</dt>
+                      <dd>{(aiResult.branchScores.classical_probability * 100).toFixed(1)}% AI</dd>
+                    </>
+                  )}
+                  {aiResult.branchScores?.cnn_probability != null && (
+                    <>
+                      <dt>Neural ResNet-18</dt>
+                      <dd>{(aiResult.branchScores.cnn_probability * 100).toFixed(1)}% AI</dd>
+                    </>
+                  )}
+                  {aiResult.branchScores?.fusion_probability != null && (
+                    <>
+                      <dt>Calibrated Fusion</dt>
+                      <dd>{(aiResult.branchScores.fusion_probability * 100).toFixed(1)}% AI</dd>
+                    </>
+                  )}
+                  <dt>Grad-CAM Overlay</dt>
+                  <dd>{aiResult.heatmapAvailable ? 'Generated' : 'Not available'}</dd>
+                  <dt>ELA Forensic Map</dt>
+                  <dd>{aiResult.elaUrl ? 'Generated' : 'Not available'}</dd>
                 </dl>
                 <details className="drawer-tech-details">
                   <summary>Technical details</summary>
                   <p>
-                    This analysis uses a visual feature extraction model trained to identify statistical patterns
-                    associated with AI image generators. The confidence score reflects model certainty, not absolute ground truth.
-                    Results should be interpreted alongside provenance and metadata evidence.
+                    <strong>Architecture:</strong> Dual-branch ensemble combining 187 Classical Forensic features
+                    (ELA recompression, 2D FFT spectral radial energy & entropy, Jia et al. CVPR 2025 color quantization,
+                    Sobel & Laplacian residuals) with a fine-tuned ResNet-18 neural classifier. Predictions are calibrated
+                    and fused via Platt scaling.
                   </p>
                 </details>
               </section>

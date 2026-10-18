@@ -40,6 +40,24 @@
 
 .meta-toggle { margin-top: var(--space-2); }
 
+.meta-ai-badge {
+  display: inline-block;
+  margin-left: 6px;
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  vertical-align: middle;
+}
+
+.meta-ai-value {
+  color: #92400e;
+  font-weight: var(--weight-medium);
+}
+
 .meta-not-found {
   font-size: var(--text-sm);
   color: var(--color-text-muted);

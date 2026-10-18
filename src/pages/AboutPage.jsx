@@ -21,27 +21,43 @@ export default function AboutPage() {
           <h2>How it works</h2>
           <ol className="about-steps">
             <li>
-              <strong>Provenance check</strong> — We first inspect Content Credentials (C2PA) embedded in the image. If the image has a verified chain of custody, that is the most reliable evidence.
+              <strong>Provenance check (C2PA & IPTC)</strong> — We first inspect Content Credentials (C2PA) and IPTC DigitalSourceType metadata embedded in the image headers. If verifiable digital provenance or AI creation disclosures are present, this provides direct chain of custody evidence.
             </li>
             <li>
-              <strong>Metadata inspection</strong> — File metadata (EXIF) is read for camera model, software, creation date, and dimensions.
+              <strong>Metadata & Prompt inspection</strong> — Standard EXIF tags and PNG text chunks (such as <code>parameters</code>, <code>prompt</code>, <code>sampler</code>, <code>steps</code>) are checked for generator signatures from tools like Stable Diffusion (Automatic1111/ComfyUI), Midjourney, and Adobe Firefly.
             </li>
             <li>
-              <strong>Watermark signals</strong> — We check for embedded digital watermarks or signals from known AI providers.
+              <strong>Digital Watermark signals</strong> — We check for standard digital watermarks and steganographic signals, including <strong>Google SynthID</strong>, Adobe C2PA digital bindings, OpenAI DALL-E markers, and open-source invisible watermarks.
             </li>
             <li>
-              <strong>Visual AI analysis</strong> — Only when provenance and metadata are inconclusive do we run a visual AI detector, which examines statistical patterns in the image.
+              <strong>Dual-Branch Visual AI Forensics</strong> — When metadata and watermarks are absent or inconclusive, the dual-branch detector executes:
+              <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
+                <li><strong>Branch A (Classical Forensics):</strong> 187 statistical features spanning Error Level Analysis (ELA), 2D FFT radial energy bins and spectral entropy, Jia et al. (CVPR 2025) color quantization distributions, and high-pass Laplacian/Sobel edge residuals.</li>
+                <li><strong>Branch B (Neural CNN):</strong> A fine-tuned ResNet-18 deep convolutional network trained to recognize generative artifacts across modern diffusion models.</li>
+                <li><strong>Late Fusion:</strong> Probabilities from both branches are calibrated and fused using isotonic/Platt scaling with a 3-way decision policy (likely real, likely AI, or uncertain).</li>
+              </ul>
             </li>
           </ol>
+        </div>
+
+        <div className="about-section">
+          <h2>Explainability & Forensics</h2>
+          <p>
+            Users can inspect two forensic visual overlays for every scanned image:
+          </p>
+          <ul className="about-limits" style={{ marginTop: '8px' }}>
+            <li><strong>Grad-CAM:</strong> Highlights spatial regions in the convolutional feature map that drove the neural network's AI prediction.</li>
+            <li><strong>ELA Map:</strong> Displays compression error residuals across 8×8 pixel blocks to reveal inconsistencies in texture and re-compression.</li>
+          </ul>
         </div>
 
         <div className="about-section">
           <h2>Important limitations</h2>
           <ul className="about-limits">
             <li>No automated system can guarantee 100% accuracy in detecting AI-generated content.</li>
-            <li>Absence of metadata or watermarks <em>does not</em> confirm AI generation.</li>
-            <li>Sophisticated editing can remove or spoof metadata.</li>
-            <li>Results should be one input among multiple forms of evidence.</li>
+            <li>Absence of metadata or watermarks <em>does not</em> confirm AI generation, as social media platforms often strip EXIF data.</li>
+            <li>Aggressive downscaling, heavy compression, or social platform re-encoding can diminish high-frequency forensic signals.</li>
+            <li>Results should be one input among multiple forms of evidence in any investigative workflow.</li>
           </ul>
         </div>
 

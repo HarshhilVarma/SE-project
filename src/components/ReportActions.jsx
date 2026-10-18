@@ -45,6 +45,24 @@ export default function ReportActions({ filename, provenance, metadata, watermar
       }
       const summaryLines = doc.splitTextToSize(aiResult.summary, W - margin * 2);
       summaryLines.forEach((l) => { line(l, margin, 10, 'normal', '#6b6b70'); nl(14); });
+
+      if (aiResult.branchScores) {
+        nl(6);
+        line('DETECTOR BRANCH BREAKDOWN', margin, 10, 'bold');
+        nl(14);
+        if (aiResult.branchScores.classical_probability != null) {
+          line(`Classical Forensics: ${(aiResult.branchScores.classical_probability * 100).toFixed(1)}% AI`, margin, 9, 'normal', '#374151');
+          nl(12);
+        }
+        if (aiResult.branchScores.cnn_probability != null) {
+          line(`Neural ResNet-18: ${(aiResult.branchScores.cnn_probability * 100).toFixed(1)}% AI`, margin, 9, 'normal', '#374151');
+          nl(12);
+        }
+        if (aiResult.branchScores.fusion_probability != null) {
+          line(`Calibrated Fusion: ${(aiResult.branchScores.fusion_probability * 100).toFixed(1)}% AI`, margin, 9, 'normal', '#374151');
+          nl(12);
+        }
+      }
     } else if (provenance?.found) {
       line(provenance.aiDisclosure ? 'AI Disclosed' : 'Provenance Verified', margin, 18, 'bold', '#16a34a');
       nl(20);

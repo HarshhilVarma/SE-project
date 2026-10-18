@@ -1,27 +1,44 @@
 import { useState } from 'react';
 import './MetadataCard.css';
 
+const AI_KEYWORDS = [
+  'firefly', 'midjourney', 'stable diffusion', 'stablediffusion', 'dall-e', 'dalle',
+  'comfyui', 'automatic1111', 'flux', 'ideogram', 'parameters', 'prompt', 'sampler', 'steps:'
+];
+
+function isAiField(key, value) {
+  const k = (key || '').toLowerCase();
+  const v = String(value || '').toLowerCase();
+  return AI_KEYWORDS.some((kw) => k.includes(kw) || v.includes(kw));
+}
+
 export default function MetadataCard({ metadata }) {
   const [showAll, setShowAll] = useState(false);
   if (!metadata) return null;
 
-  const primaryFields = metadata.fields?.slice(0, 4) ?? [];
-  const extraFields   = metadata.fields?.slice(4) ?? [];
+  const primaryFields = metadata.fields?.slice(0, 5) ?? [];
+  const extraFields   = metadata.fields?.slice(5) ?? [];
   const displayFields = showAll ? metadata.fields : primaryFields;
 
   return (
     <div className="meta-card card">
-      <span className="section-label">Image Metadata</span>
+      <span className="section-label">Image Metadata & EXIF</span>
 
       {metadata.found ? (
         <>
           <dl className="meta-fields">
-            {displayFields.map(({ key, value }) => (
-              <div className="meta-field" key={key}>
-                <dt>{key}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
+            {displayFields.map(({ key, value }) => {
+              const aiHighlight = isAiField(key, value);
+              return (
+                <div className="meta-field" key={key}>
+                  <dt>
+                    {key}
+                    {aiHighlight && <span className="meta-ai-badge">AI Signal</span>}
+                  </dt>
+                  <dd className={aiHighlight ? 'meta-ai-value' : ''}>{value}</dd>
+                </div>
+              );
+            })}
           </dl>
 
           {metadata.hasAiSignals && (
@@ -31,7 +48,7 @@ export default function MetadataCard({ metadata }) {
                 <line x1="12" y1="8" x2="12" y2="12"/>
                 <line x1="12" y1="16" x2="12.01" y2="16"/>
               </svg>
-              Software metadata suggests possible AI-assisted editing. This is evidence, not proof.
+              AI Generation Signatures Found: Embedded metadata contains prompt parameters, generative software tags, or sampler settings.
             </div>
           )}
 

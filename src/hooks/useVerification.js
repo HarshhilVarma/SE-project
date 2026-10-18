@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { runVerification } from '../api/mockVerify';
+import { runVerification } from '../api/verifyApi';
 
 /**
  * Custom hook that drives the full verification pipeline.
