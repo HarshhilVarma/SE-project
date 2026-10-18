@@ -103,6 +103,14 @@ def load_image(
         elif isinstance(source, Image.Image):
             pil_img = source
             file_size_bytes = getattr(source, "size", (0, 0))[0] * getattr(source, "size", (0, 0))[1] * 3
+        elif isinstance(source, np.ndarray):
+            if source.ndim == 3 and source.shape[2] == 3:
+                pil_img = Image.fromarray(source, mode="RGB")
+            elif source.ndim == 2:
+                pil_img = Image.fromarray(source, mode="L").convert("RGB")
+            else:
+                raise ImageDecodeError(f"Unsupported numpy array shape: {source.shape}")
+            file_size_bytes = source.nbytes
         else:
             raise TypeError(f"Unsupported image source type: {type(source)}")
 

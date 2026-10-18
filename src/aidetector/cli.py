@@ -146,6 +146,81 @@ def cmd_train_cnn(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_train_fusion(args: argparse.Namespace) -> int:
+    """Trains late fusion model combining Classical and CNN branches."""
+    from aidetector.training.train_fusion import train_fusion_model
+
+    manifest_path = Path(args.manifest)
+    classical_bundle = args.classical_bundle or "artifacts/classical_bundle.joblib"
+    cnn_checkpoint = args.cnn_checkpoint or "artifacts/cnn_resnet18_best.pt"
+    output_fusion = args.output_fusion or "artifacts/fusion_model.joblib"
+    reports_dir = args.reports_dir or "reports"
+
+    print(f"Starting late fusion training with manifest {manifest_path}...")
+    fusion, metrics = train_fusion_model(
+        manifest_path=manifest_path,
+        classical_bundle_path=classical_bundle,
+        cnn_checkpoint_path=cnn_checkpoint,
+        output_fusion_path=output_fusion,
+        reports_dir=reports_dir,
+    )
+    print("Late fusion training finished successfully!")
+    return 0
+
+
+def cmd_evaluate(args: argparse.Namespace) -> int:
+    """Evaluates all branches on test split and generates graphs and reports."""
+    from aidetector.training.evaluate import evaluate_test_split
+
+    manifest_path = Path(args.manifest)
+    classical_bundle = args.classical_bundle or "artifacts/classical_bundle.joblib"
+    cnn_checkpoint = args.cnn_checkpoint or "artifacts/cnn_resnet18_best.pt"
+    fusion_model = args.fusion_model or "artifacts/fusion_model.joblib"
+    reports_dir = args.reports_dir or "reports"
+
+    print(f"Evaluating detector on {manifest_path} test split...")
+    report = evaluate_test_split(
+        manifest_path=manifest_path,
+        classical_bundle_path=classical_bundle,
+        cnn_checkpoint_path=cnn_checkpoint,
+        fusion_model_path=fusion_model,
+        reports_dir=reports_dir,
+    )
+    print("Evaluation finished! Check reports/ for full metrics and figures.")
+    return 0
+
+
+def cmd_predict(args: argparse.Namespace) -> int:
+    """Predicts veracity of a single image using the full combined detector."""
+    from aidetector.inference import FullDetector
+    from aidetector.models.classical_model import ClassicalModelBundle
+    from aidetector.models.cnn import CNNModelBundle
+    from aidetector.models.fusion import LateFusionModel
+
+    image_path = Path(args.image)
+    c_bundle_path = Path(args.classical_bundle or "artifacts/classical_bundle.joblib")
+    n_ckpt_path = Path(args.cnn_checkpoint or "artifacts/cnn_resnet18_best.pt")
+    f_model_path = Path(args.fusion_model or "artifacts/fusion_model.joblib")
+
+    c_bundle = ClassicalModelBundle.load(c_bundle_path) if c_bundle_path.is_file() else None
+    n_bundle = CNNModelBundle.load(n_ckpt_path) if n_ckpt_path.is_file() else None
+    f_model = LateFusionModel.load(f_model_path) if f_model_path.is_file() else None
+
+    if c_bundle is None and n_bundle is None:
+        print("Error: Neither classical nor CNN checkpoint was found. Please train models first.", file=sys.stderr)
+        return 1
+
+    detector = FullDetector(
+        classical_bundle=c_bundle,
+        cnn_bundle=n_bundle,
+        fusion_model=f_model,
+    )
+
+    result = detector.predict_image(image_path)
+    print(json.dumps(result, indent=2))
+    return 0
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     """Main CLI entrypoint."""
     parser = argparse.ArgumentParser(
@@ -194,6 +269,29 @@ def main(argv: Optional[List[str]] = None) -> int:
     p_cnn.add_argument("--pretrained", action="store_true", help="Initialize backbone with ImageNet weights")
     p_cnn.add_argument("--seed", type=int, default=42, help="Random seed")
 
+    # Command: train-fusion
+    p_fus = subparsers.add_parser("train-fusion", help="Train late fusion model")
+    p_fus.add_argument("--manifest", "-m", required=True, help="Path to dataset manifest CSV")
+    p_fus.add_argument("--classical-bundle", default="artifacts/classical_bundle.joblib", help="Classical bundle path")
+    p_fus.add_argument("--cnn-checkpoint", default="artifacts/cnn_resnet18_best.pt", help="CNN checkpoint path")
+    p_fus.add_argument("--output-fusion", "-o", default="artifacts/fusion_model.joblib", help="Fusion save path")
+    p_fus.add_argument("--reports-dir", "-r", default="reports", help="Reports output directory")
+
+    # Command: evaluate
+    p_eval = subparsers.add_parser("evaluate", help="Evaluate models on test split and generate reports & figures")
+    p_eval.add_argument("--manifest", "-m", required=True, help="Path to dataset manifest CSV")
+    p_eval.add_argument("--classical-bundle", default="artifacts/classical_bundle.joblib", help="Classical bundle path")
+    p_eval.add_argument("--cnn-checkpoint", default="artifacts/cnn_resnet18_best.pt", help="CNN checkpoint path")
+    p_eval.add_argument("--fusion-model", default="artifacts/fusion_model.joblib", help="Fusion model path")
+    p_eval.add_argument("--reports-dir", "-r", default="reports", help="Reports output directory")
+
+    # Command: predict
+    p_pred = subparsers.add_parser("predict", help="Predict veracity of a single image")
+    p_pred.add_argument("image", help="Path to image file")
+    p_pred.add_argument("--classical-bundle", default="artifacts/classical_bundle.joblib", help="Classical bundle path")
+    p_pred.add_argument("--cnn-checkpoint", default="artifacts/cnn_resnet18_best.pt", help="CNN checkpoint path")
+    p_pred.add_argument("--fusion-model", default="artifacts/fusion_model.joblib", help="Fusion model path")
+
     args = parser.parse_args(argv)
 
     if not args.command:
@@ -210,6 +308,12 @@ def main(argv: Optional[List[str]] = None) -> int:
         return cmd_train_classical(args)
     elif args.command == "train-cnn":
         return cmd_train_cnn(args)
+    elif args.command == "train-fusion":
+        return cmd_train_fusion(args)
+    elif args.command == "evaluate":
+        return cmd_evaluate(args)
+    elif args.command == "predict":
+        return cmd_predict(args)
     else:
         parser.print_help()
         return 1
@@ -217,4 +321,5 @@ def main(argv: Optional[List[str]] = None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
 
