@@ -8,6 +8,12 @@ import torch
 import torch.nn as nn
 from torchvision import models, transforms
 from PIL import Image
+import os
+
+# Automatically use local workspace torch cache if present
+_local_cache = Path(__file__).resolve().parents[3] / ".cache" / "torch"
+if _local_cache.is_dir() and "TORCH_HOME" not in os.environ:
+    os.environ["TORCH_HOME"] = str(_local_cache)
 
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
@@ -168,3 +174,4 @@ class CNNModelBundle:
         model.eval()
 
         return cls(model=model, metadata=metadata, device=dev)
+

@@ -29,3 +29,4 @@ This project follows the milestone breakdown from `AGENT_BUILD_SPEC_AI_IMAGE_DET
 - **Milestone 4: Explainability & Unified Evaluation**
   - Robustness testing under perturbations (blur, compression, resizing).
   - Cross-generator evaluation reports.
+

@@ -34,3 +34,4 @@ def test_gradcam_overlay():
     assert overlay.dtype == np.uint8
     assert colored_cam.shape == (300, 400, 3)
     assert colored_cam.dtype == np.uint8
+

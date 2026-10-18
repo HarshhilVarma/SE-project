@@ -72,3 +72,4 @@ def test_cnn_checkpoint_metadata_mismatch(tmp_path: Path):
 
     with pytest.raises(CheckpointMetadataMismatchError):
         CNNModelBundle.load(save_path, expected_architecture="resnet18")
+

@@ -246,3 +246,4 @@ def train_cnn_baseline(
     print(f"Saved CNN training report to: {report_file}")
 
     return best_bundle, metadata
+

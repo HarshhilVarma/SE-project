@@ -108,3 +108,4 @@ aidetector train-classical --manifest data/manifests/dataset.csv --config config
 2. Sarnikar et al., "FakeVision++: A Computationally Efficient Dual-Descriptor Image Forensic Framework using HFRD–FCDS Modeling", *IEEE IATMSI*, 2026.
 3. Roy et al., "A Comprehensive Dataset for Human vs. AI Generated Image Detection", *arXiv:2601.00553*, 2026 (Defactify).
 4. Park, Na and Choi, "Performance Comparison and Visualization of AI-Generated-Image Detection Methods", *IEEE Access*, 2024.
+
