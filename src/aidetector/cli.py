@@ -123,6 +123,29 @@ def cmd_train_classical(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_train_cnn(args: argparse.Namespace) -> int:
+    """Trains the ResNet-18 CNN detector."""
+    from aidetector.training.train_cnn import train_cnn_baseline
+
+    manifest_path = Path(args.manifest)
+    output_checkpoint = args.output_checkpoint or "artifacts/cnn_resnet18_best.pt"
+    reports_dir = args.reports_dir or "reports"
+
+    print(f"Starting CNN training with manifest {manifest_path}...")
+    bundle, metrics = train_cnn_baseline(
+        manifest_path=manifest_path,
+        output_checkpoint_path=output_checkpoint,
+        reports_dir=reports_dir,
+        epochs=args.epochs,
+        batch_size=args.batch_size,
+        learning_rate=args.lr,
+        pretrained=args.pretrained,
+        seed=args.seed,
+    )
+    print("CNN training finished successfully!")
+    return 0
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     """Main CLI entrypoint."""
     parser = argparse.ArgumentParser(
@@ -160,6 +183,17 @@ def main(argv: Optional[List[str]] = None) -> int:
     p_train.add_argument("--output-bundle", "-o", default="artifacts/classical_bundle.joblib", help="Output bundle path")
     p_train.add_argument("--reports-dir", "-r", default="reports", help="Reports output directory")
 
+    # Command: train-cnn
+    p_cnn = subparsers.add_parser("train-cnn", help="Train ResNet-18 CNN detector")
+    p_cnn.add_argument("--manifest", "-m", required=True, help="Path to dataset manifest CSV")
+    p_cnn.add_argument("--output-checkpoint", "-o", default="artifacts/cnn_resnet18_best.pt", help="Checkpoint save path")
+    p_cnn.add_argument("--reports-dir", "-r", default="reports", help="Reports output directory")
+    p_cnn.add_argument("--epochs", type=int, default=3, help="Training epochs")
+    p_cnn.add_argument("--batch-size", type=int, default=16, help="Batch size")
+    p_cnn.add_argument("--lr", type=float, default=1e-4, help="Learning rate")
+    p_cnn.add_argument("--pretrained", action="store_true", help="Initialize backbone with ImageNet weights")
+    p_cnn.add_argument("--seed", type=int, default=42, help="Random seed")
+
     args = parser.parse_args(argv)
 
     if not args.command:
@@ -174,6 +208,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         return cmd_prepare_data(args)
     elif args.command == "train-classical":
         return cmd_train_classical(args)
+    elif args.command == "train-cnn":
+        return cmd_train_cnn(args)
     else:
         parser.print_help()
         return 1

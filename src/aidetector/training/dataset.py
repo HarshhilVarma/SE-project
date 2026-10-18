@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Union
 import pandas as pd
 from PIL import Image
+import torch
 
 
 REQUIRED_COLUMNS = [
@@ -276,4 +277,57 @@ def extract_defactify_subset(
     manifest_df = pd.DataFrame(manifest_rows)
     manifest_df.to_csv(manifest_out, index=False)
     return manifest_df
+
+
+class AIDetectionTorchDataset:
+    """PyTorch Dataset for training and evaluating CNN detectors with manifest CSV."""
+
+    def __init__(
+        self,
+        manifest: Union[str, Path, pd.DataFrame],
+        split: Optional[str] = None,
+        transform=None,
+    ):
+        if isinstance(manifest, (str, Path)):
+            df = pd.read_csv(manifest)
+        else:
+            df = manifest.copy()
+
+        if split is not None:
+            df = df[df["split"] == split].reset_index(drop=True)
+
+        self.df = df
+        self.transform = transform
+
+    def __len__(self) -> int:
+        return len(self.df)
+
+    def __getitem__(self, idx: int):
+        row = self.df.iloc[idx]
+        img_path = Path(row["image_path"])
+        label = float(row["label"])
+
+        try:
+            with Image.open(img_path) as img:
+                rgb_img = img.convert("RGB")
+        except Exception as e:
+            # Fallback to zero image on corrupt file
+            rgb_img = Image.new("RGB", (224, 224), (0, 0, 0))
+
+        if self.transform is not None:
+            tensor = self.transform(rgb_img)
+        else:
+            from torchvision.transforms import functional as TF
+            tensor = TF.to_tensor(rgb_img)
+
+        sample_info = {
+            "image_path": str(img_path),
+            "label": int(label),
+            "generator_family": row.get("generator_family", "unknown"),
+            "content_group": row.get("content_group", ""),
+            "format": row.get("format", ""),
+        }
+
+        return tensor, torch.tensor(label, dtype=torch.float32), sample_info
+
 
