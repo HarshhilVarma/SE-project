@@ -1,0 +1,34 @@
+# Training Configuration for Classical and CNN pipelines
+
+random_seed: 42
+output_dir: "artifacts"
+reports_dir: "reports"
+
+classical:
+  ela:
+    quality: 90
+    scale: 10.0
+    grid_tiles: 4
+  color_restoration:
+    quantization_bits: 5
+    num_samples: 8
+    noise_scale: 4.0
+    seed: 42
+    grid_tiles: 4
+  residuals:
+    laplacian_ksize: 3
+    edge_threshold: 20.0
+    grid_tiles: 4
+  frequency:
+    num_radial_bins: 16
+    eps: 1.0e-7
+
+model:
+  classical_type: "hist_gradient_boosting" # Options: logistic_regression, rbf_svm, hist_gradient_boosting, random_forest
+  cv_folds: 5
+
+quality:
+  min_width: 64
+  min_height: 64
+  max_image_pixels: 89478485
+

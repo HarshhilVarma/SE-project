@@ -1,0 +1,14 @@
+# AI-Generated Image Detector Requirements
+numpy>=2.0.0
+scipy>=1.15.0
+scikit-learn>=1.6.0
+opencv-python-headless>=4.10.0
+pillow>=11.0.0
+torch>=2.4.0
+torchvision>=0.19.0
+joblib>=1.4.0
+pyyaml>=6.0.0
+pyarrow>=18.0.0
+pandas>=2.2.0
+pytest>=8.0.0
+

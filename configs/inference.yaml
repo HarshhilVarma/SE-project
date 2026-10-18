@@ -1,0 +1,34 @@
+# Inference Configuration
+
+model_version: "aid-ab-v1"
+preprocessing_version: "prep-v1"
+
+classical:
+  ela:
+    quality: 90
+    scale: 10.0
+    grid_tiles: 4
+  color_restoration:
+    quantization_bits: 5
+    num_samples: 8
+    noise_scale: 4.0
+    seed: 42
+    grid_tiles: 4
+  residuals:
+    laplacian_ksize: 3
+    edge_threshold: 20.0
+    grid_tiles: 4
+  frequency:
+    num_radial_bins: 16
+    eps: 1.0e-7
+
+thresholds:
+  ai_threshold: 0.60
+  real_threshold: 0.40
+  # Scores between real_threshold and ai_threshold are classified as 'uncertain'
+
+quality:
+  min_width: 64
+  min_height: 64
+  max_image_pixels: 89478485
+
