@@ -52,51 +52,6 @@ export default function AboutPage() {
         </div>
 
         <div className="about-section">
-          <h2>UML Use Case Architecture</h2>
-          <p>
-            The platform's architecture directly implements the formal <strong>AI Image Detection System</strong> Use Case Specification with three primary actors:
-          </p>
-          <div style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
-            <div style={{ padding: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>
-              <h3 style={{ fontSize: '14px', fontWeight: 'var(--weight-bold)', marginBottom: '8px' }}>👤 User Actor</h3>
-              <ul style={{ fontSize: '12px', color: 'var(--color-text-muted)', lineHeight: '1.6', paddingLeft: '16px', listStyle: 'disc' }}>
-                <li><strong>Login</strong> (with <code>&lt;&lt;include&gt;&gt;</code> <strong>Register</strong>)</li>
-                <li><strong>Logout</strong></li>
-                <li><strong>Upload Image</strong> (with <code>&lt;&lt;extend&gt;&gt;</code> <strong>Show File Format Error</strong>)</li>
-                <li><strong>Detect AI-Generated Image</strong></li>
-                <li><strong>View Detection Result</strong> (includes detection)</li>
-                <li><strong>View Confidence Score</strong> (calibrated %)</li>
-                <li><strong>View Analysis Detail</strong> (forensic drawer)</li>
-                <li><strong>Download/Save Report</strong> (PDF export)</li>
-                <li><strong>View Detection History</strong> (scan timeline)</li>
-              </ul>
-            </div>
-
-            <div style={{ padding: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>
-              <h3 style={{ fontSize: '14px', fontWeight: 'var(--weight-bold)', marginBottom: '8px' }}>🛡️ Admin Actor</h3>
-              <ul style={{ fontSize: '12px', color: 'var(--color-text-muted)', lineHeight: '1.6', paddingLeft: '16px', listStyle: 'disc' }}>
-                <li><strong>Login & Logout</strong></li>
-                <li><strong>Add User</strong> (account provisioning)</li>
-                <li><strong>Remove User</strong> (account deletion)</li>
-                <li><strong>Suspend/Activate User</strong> (access controls)</li>
-                <li><strong>View System Statistics</strong> (performance metrics)</li>
-                <li><strong>Generate System Reports</strong> (audit exports)</li>
-                <li><strong>View System Logs</strong> (full system trail)</li>
-              </ul>
-            </div>
-
-            <div style={{ padding: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>
-              <h3 style={{ fontSize: '14px', fontWeight: 'var(--weight-bold)', marginBottom: '8px' }}>🔒 Security Service Actor</h3>
-              <ul style={{ fontSize: '12px', color: 'var(--color-text-muted)', lineHeight: '1.6', paddingLeft: '16px', listStyle: 'disc' }}>
-                <li><strong>Authenticate User</strong> (session & token verification)</li>
-                <li><strong>Revoke Sessions</strong> (flagged access controls)</li>
-                <li><strong>View System Logs</strong> (security & threat audit trails)</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="about-section">
           <h2>Important limitations</h2>
           <ul className="about-limits">
             <li>No automated system can guarantee 100% accuracy in detecting AI-generated content.</li>

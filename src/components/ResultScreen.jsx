@@ -29,9 +29,9 @@ export default function ResultScreen({ results, imageUrl, filename, onReset }) {
         <button
           className="btn btn-ghost btn-sm"
           onClick={() => setDrawerOpen(true)}
-          aria-label="View Analysis Detail"
+          aria-label="Open full analysis details"
         >
-          🔍 View Analysis Detail
+          View full details
         </button>
       </div>
 
