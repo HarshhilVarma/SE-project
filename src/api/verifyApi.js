@@ -127,7 +127,7 @@ export async function loginApi({ username_or_email, password, role }) {
     return {
       success: true,
       user,
-      token: `tok_${user.role.toLowerCase()[:3]}_${Date.now()}`,
+      token: `tok_${user.role.toLowerCase().slice(0, 3)}_${Date.now()}`,
     };
   }
 }
@@ -159,7 +159,7 @@ export async function registerApi({ username, email, password, role }) {
     };
     users.push(newUser);
     setLocalUsers(users);
-    return { success: true, user: newUser, token: `tok_${newUser.role.toLowerCase()[:3]}_${Date.now()}` };
+    return { success: true, user: newUser, token: `tok_${newUser.role.toLowerCase().slice(0, 3)}_${Date.now()}` };
   }
 }
 

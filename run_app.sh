@@ -94,12 +94,19 @@ else
   exit 1
 fi
 
-# Locate Node / npm
+# Locate Node / npm (including nvm auto-detection)
 NPM_BIN=""
 if command -v npm &>/dev/null; then
   NPM_BIN="npm"
 elif command -v bun &>/dev/null; then
   NPM_BIN="bun"
+else
+  # Check common nvm and local paths
+  NVM_NODE_BIN=$(ls -d "$HOME/.nvm/versions/node/"*/bin 2>/dev/null | tail -n 1)
+  if [[ -n "$NVM_NODE_BIN" && -x "$NVM_NODE_BIN/npm" ]]; then
+    export PATH="$NVM_NODE_BIN:$PATH"
+    NPM_BIN="$NVM_NODE_BIN/npm"
+  fi
 fi
 
 # Track child background PIDs for graceful termination
