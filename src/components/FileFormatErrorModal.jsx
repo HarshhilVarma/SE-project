@@ -90,4 +90,3 @@ export default function FileFormatErrorModal({ isOpen, fileInfo, onClose, onRetr
     </div>
   );
 }
-
