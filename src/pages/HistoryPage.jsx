@@ -64,6 +64,7 @@ export default function HistoryPage() {
             <thead>
               <tr>
                 <th scope="col">Image</th>
+                <th scope="col">Scanned By</th>
                 <th scope="col">Result</th>
                 <th scope="col">Confidence</th>
                 <th scope="col">Date</th>
@@ -85,6 +86,9 @@ export default function HistoryPage() {
                         </span>
                         <span className="hist-fname">{entry.filename}</span>
                       </div>
+                    </td>
+                    <td style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                      👤 {entry.user || 'harshi'}
                     </td>
                     <td>
                       <span className={`hist-badge ${cfg.cls}`}>{cfg.label}</span>

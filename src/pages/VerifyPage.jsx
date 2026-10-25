@@ -2,7 +2,9 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import UploadCard from '../components/UploadCard';
 import VerificationProgress from '../components/VerificationProgress';
 import ResultScreen from '../components/ResultScreen';
+import FileFormatErrorModal from '../components/FileFormatErrorModal';
 import { useVerification } from '../hooks/useVerification';
+import { useAuth } from '../context/AuthContext';
 import './VerifyPage.css';
 
 const SUPPORTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -10,9 +12,11 @@ const MAX_BYTES = 20 * 1024 * 1024;
 
 export default function VerifyPage() {
   const { stage, steps, results, startVerification, reset } = useVerification();
+  const { currentUser } = useAuth();
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [validationError, setValidationError] = useState(null);
+  const [formatErrorFile, setFormatErrorFile] = useState(null);
 
   // Cleanup object URL on unmount or new file
   const prevUrl = useRef(null);
@@ -22,12 +26,16 @@ export default function VerifyPage() {
     };
   }, []);
 
+  const handleFormatError = useCallback((rejectedFile) => {
+    setFormatErrorFile(rejectedFile || { name: 'unsupported_file', type: 'unknown' });
+  }, []);
+
   const handleFileSelected = useCallback((selectedFile) => {
     setValidationError(null);
 
-    // Validate
+    // Validate format for UML <<extend>> Show File Format Error
     if (!SUPPORTED_TYPES.includes(selectedFile.type)) {
-      setValidationError('Unsupported file format. Accepted: JPG · PNG · WEBP');
+      handleFormatError(selectedFile);
       return;
     }
     if (selectedFile.size > MAX_BYTES) {
@@ -43,10 +51,11 @@ export default function VerifyPage() {
     setFile(selectedFile);
     setImageUrl(url);
 
-    // Persist to history (localStorage) — will be updated with result later
+    // Persist to history (localStorage) — associated with current user
     const entry = {
       id: Date.now(),
       filename: selectedFile.name,
+      user: currentUser?.username || 'user',
       date: new Date().toISOString(),
       result: 'pending',
     };
@@ -54,7 +63,7 @@ export default function VerifyPage() {
     localStorage.setItem('av-history', JSON.stringify([entry, ...existing].slice(0, 50)));
 
     startVerification(selectedFile);
-  }, [startVerification]);
+  }, [startVerification, handleFormatError, currentUser]);
 
   // Save result to history when done
   useEffect(() => {
@@ -87,8 +96,22 @@ export default function VerifyPage() {
   return (
     <div className="verify-page">
       {stage === 'idle' && (
-        <UploadCard onFileSelected={handleFileSelected} />
+        <UploadCard
+          onFileSelected={handleFileSelected}
+          onFormatError={handleFormatError}
+        />
       )}
+
+      {/* UML <<extend>> Show File Format Error */}
+      <FileFormatErrorModal
+        isOpen={!!formatErrorFile}
+        fileInfo={formatErrorFile}
+        onClose={() => setFormatErrorFile(null)}
+        onRetry={() => {
+          setFormatErrorFile(null);
+          handleReset();
+        }}
+      />
 
       {(stage === 'running') && (
         <div className="page-container verify-progress-wrap">

@@ -11,7 +11,7 @@ const ACCEPTED_TYPES = {
 const MAX_SIZE_MB = 20;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
-export default function UploadCard({ onFileSelected }) {
+export default function UploadCard({ onFileSelected, onFormatError }) {
   const [validationError, setValidationError] = useState(null);
 
   const onDrop = useCallback(
@@ -20,12 +20,19 @@ export default function UploadCard({ onFileSelected }) {
 
       if (rejectedFiles.length > 0) {
         const error = rejectedFiles[0].errors[0];
+        const rejected = rejectedFiles[0].file;
         if (error.code === 'file-too-large') {
           setValidationError(`File is too large. Maximum size is ${MAX_SIZE_MB} MB.`);
         } else if (error.code === 'file-invalid-type') {
           setValidationError('Unsupported file format. Accepted: JPG · PNG · WEBP');
+          if (onFormatError) {
+            onFormatError(rejected);
+          }
         } else {
           setValidationError('Could not process this file. Please try another.');
+          if (onFormatError) {
+            onFormatError(rejected);
+          }
         }
         return;
       }
@@ -34,7 +41,7 @@ export default function UploadCard({ onFileSelected }) {
         onFileSelected(acceptedFiles[0]);
       }
     },
-    [onFileSelected]
+    [onFileSelected, onFormatError]
   );
 
   const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({

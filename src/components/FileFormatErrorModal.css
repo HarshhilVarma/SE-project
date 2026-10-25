@@ -1,0 +1,150 @@
+/* ============================================================
+   File Format Error Modal Styles (<<extend>> Upload Image)
+   ============================================================ */
+
+.format-error-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  animation: fadeIn 0.15s ease-out;
+}
+
+.format-error-card {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-error-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 50px -12px rgba(220, 38, 38, 0.2);
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  animation: bounceIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.format-error-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  background: linear-gradient(135deg, var(--color-error-bg) 0%, #fff 100%);
+  border-bottom: 1px solid var(--color-error-border);
+}
+
+.format-error-icon-wrap {
+  width: 44px;
+  height: 44px;
+  background: #fee2e2;
+  color: var(--color-error);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.format-error-icon-wrap svg {
+  width: 24px;
+  height: 24px;
+}
+
+.format-error-title-wrap {
+  flex: 1;
+}
+
+.format-error-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  color: var(--color-error);
+  background: #fecaca;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 4px;
+}
+
+.format-error-title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.format-error-body {
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.format-error-meta {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.format-error-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.format-error-row:last-child {
+  margin-bottom: 0;
+}
+
+.format-error-key {
+  color: var(--color-text-muted);
+}
+
+.format-error-val {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+  font-family: var(--font-mono, monospace);
+}
+
+.format-error-accepted {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.format-error-pill-list {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.format-error-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  color: var(--color-success);
+  border-radius: var(--radius-sm);
+  font-weight: var(--weight-semibold);
+  font-size: 11px;
+}
+
+.format-error-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border);
+  background: #fafaf9;
+}
+
+@keyframes bounceIn {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
